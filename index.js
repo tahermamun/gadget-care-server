@@ -136,9 +136,8 @@ client.connect(err => {
 });
 
 
-const port = 5000;
 app.get('/', (req, res) => {
     res.send('hello me')
 })
 
-app.listen(process.env.PORT || port)
+app.listen(process.env.PORT || 5000)
