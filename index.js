@@ -76,7 +76,7 @@ client.connect(err => {
             })
     })
 
-    // Single Product Load Method
+    // Single services Load Method
     app.get('/payment/:serviceId', (req, res) => {
         servicesCollection.find({ _id: ObjectID(req.params.serviceId) })
             .toArray((err, document) => {
@@ -105,7 +105,7 @@ client.connect(err => {
 
     })
 
-    //Delete Product Method
+    //Delete Services Method
     app.delete('/deleteService/:id', (req, res) => {
         const id = ObjectID(req.params.id)
         console.log(id)
