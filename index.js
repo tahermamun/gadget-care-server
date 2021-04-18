@@ -7,6 +7,7 @@ require('dotenv').config()
 
 const app = express()
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors())
 
 
@@ -116,12 +117,11 @@ client.connect(err => {
 
 
     app.patch('/update/:id', (req, res) => {
-        console.log('state me', req.body.OrderStatus)
-        console.log('state me', req.params.id)
-        console.log('state me', req.params.id)
-        // var updateObject = req.body;
-        const id = ObjectID(`${req.params.id}`)
 
+        console.log('STATUS HERE: ', req.body.OrderStatus)
+        console.log('UPDATE ID: ', req.params.id)
+
+        const id = ObjectID(`${req.params.id}`)
 
         serviceOrderCollection.updateOne({ _id: id },
             {
@@ -129,16 +129,9 @@ client.connect(err => {
             })
             .then(result => {
                 res.send(result.modifiedCount > 0)
-                console.log(result)
             })
 
     })
-
-
-
-
-
-
 
     app.post('/isAdmin', (req, res) => {
         const email = req.body.email
