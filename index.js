@@ -14,12 +14,13 @@ app.use(cors())
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.qkst0.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-client.connect(err => {
-    const servicesCollection = client.db(`${process.env.DB_NAME}`).collection("services");
-    const serviceOrderCollection = client.db(`${process.env.DB_NAME}`).collection("serviceOrder");
-    const reviewCollection = client.db(`${process.env.DB_NAME}`).collection("reviews");
-    const adminCollection = client.db(`${process.env.DB_NAME}`).collection("admin");
 
+client.connect(err => {
+    const servicesCollection = client.db("gadget-care").collection("services");
+    const serviceOrderCollection = client.db("gadget-care").collection("serviceOrder");
+    const reviewCollection = client.db("gadget-care").collection("reviews");
+    const adminCollection = client.db("gadget-care").collection("admin");
+    console.log(err)
 
     // Service add method
     app.post('/addService', (req, res) => {
