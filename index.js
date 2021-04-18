@@ -57,9 +57,6 @@ client.connect(err => {
             })
     })
 
-
-
-
     //All Services Load Method 
     app.get('/services', (req, res) => {
         servicesCollection.find({})
@@ -67,7 +64,6 @@ client.connect(err => {
                 res.send(document)
             })
     })
-
 
     app.get('/reviews', (req, res) => {
         reviewCollection.find({})
@@ -85,15 +81,12 @@ client.connect(err => {
             })
     })
 
-
-
     app.get('/orderList', (req, res) => {
 
         serviceOrderCollection.find({ email: req.query.email })
             .toArray((err, document) => {
                 res.send(document)
             })
-
     })
 
     app.get('/manageServices', (req, res) => {
@@ -102,7 +95,6 @@ client.connect(err => {
             .toArray((err, document) => {
                 res.send(document)
             })
-
     })
 
     //Delete Services Method
@@ -112,7 +104,6 @@ client.connect(err => {
         servicesCollection.findOneAndDelete({ _id: id })
             .then(document => res.send(document))
     })
-
 
 
     app.patch('/update/:id', (req, res) => {
@@ -129,7 +120,6 @@ client.connect(err => {
             .then(result => {
                 res.send(result.modifiedCount > 0)
             })
-
     })
 
 
@@ -143,20 +133,12 @@ client.connect(err => {
     })
 
 
-
-
 });
 
 
-
-
-
-
-
-
 const port = 5000;
-// app.get('/', (req, res) => {
-//     res.send('hello me')
-// })
+app.get('/', (req, res) => {
+    res.send('hello me')
+})
 
 app.listen(process.env.PORT || port)
