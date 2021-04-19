@@ -2,9 +2,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const ObjectID = require('mongodb').ObjectID;
-const MongoClient = require('Mongodb').MongoClient
+const MongoClient = require('mongodb').MongoClient;
 require('dotenv').config()
-const port = process.env.PORT || 5000;
+
 
 const app = express()
 app.use(bodyParser.json())
@@ -31,7 +31,6 @@ client.connect(err => {
                 res.send(res.insertedCount > 0)
             })
     })
-
     app.post('/addServiceOrder', (req, res) => {
         const newServiceOrder = req.body
         serviceOrderCollection.insertOne(newServiceOrder)
@@ -40,7 +39,6 @@ client.connect(err => {
                 res.send(res.insertedCount > 0)
             })
     })
-
     app.post('/addReview', (req, res) => {
         const newServiceOrder = req.body
         reviewCollection.insertOne(newServiceOrder)
@@ -49,7 +47,6 @@ client.connect(err => {
                 res.send(res.insertedCount > 0)
             })
     })
-
     app.post('/makeAdmin', (req, res) => {
         const newServiceOrder = req.body
         adminCollection.insertOne(newServiceOrder)
@@ -66,14 +63,12 @@ client.connect(err => {
                 res.send(document)
             })
     })
-
     app.get('/reviews', (req, res) => {
         reviewCollection.find({})
             .toArray((err, document) => {
                 res.send(document)
             })
     })
-
     // Single services Load Method
     app.get('/payment/:serviceId', (req, res) => {
         servicesCollection.find({ _id: ObjectID(req.params.serviceId) })
@@ -83,7 +78,9 @@ client.connect(err => {
             })
     })
 
-    app.get('/orderList', (req, res) => {
+
+    // booking list method
+    app.get('/bookingList', (req, res) => {
 
         serviceOrderCollection.find({ email: req.query.email })
             .toArray((err, document) => {
@@ -91,6 +88,44 @@ client.connect(err => {
             })
     })
 
+
+    // Update Order List method
+    app.get('/updateOrderList', (req, res) => {
+
+        serviceOrderCollection.find({ _id: req.query.id })
+            .toArray((err, document) => {
+                res.send(document)
+            })
+    })
+
+
+    // Order List methods
+    app.get('/orderList', (req, res) => {
+
+        serviceOrderCollection.find({})
+            .toArray((err, document) => {
+                res.send(document)
+            })
+    })
+
+
+    // Order Status Change method
+    app.put('/updateStatus', async (req, res) => {
+        const newStatus = req.body.newStatus
+        const id = req.body.id
+        try {
+            serviceOrderCollection.update(id, (updateSta) => {
+                updateSta.OrderStatus = newStatus
+                updateSta.save()
+            })
+        }
+        catch (err) {
+            console.log(err)
+        }
+    })
+
+
+    // manage Services Methdo
     app.get('/manageServices', (req, res) => {
 
         servicesCollection.find()
@@ -108,23 +143,9 @@ client.connect(err => {
     })
 
 
-    app.patch('/update/:id', (req, res) => {
-
-        console.log('STATUS HERE: ', req.body.OrderStatus)
-        console.log('UPDATE ID: ', req.params.id)
-
-        const id = ObjectID(`${req.params.id}`)
-
-        serviceOrderCollection.updateOne({ _id: id },
-            {
-                $set: { OrderStatus: req.body.OrderStatus }
-            })
-            .then(result => {
-                res.send(result.modifiedCount > 0)
-            })
-    })
 
 
+    // Check Admin Method
     app.post('/isAdmin', (req, res) => {
         const email = req.body.email
         adminCollection.find({ adminEmail: email })
@@ -133,13 +154,14 @@ client.connect(err => {
             })
 
     })
-
-
 });
 
 
 app.get('/', (req, res) => {
     res.send('hello me')
 })
+
+const port = process.env.PORT || 5000
+
 
 app.listen(port)
